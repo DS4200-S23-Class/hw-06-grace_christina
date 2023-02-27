@@ -74,6 +74,7 @@ function build_length_scatter() {
 build_length_scatter();
 
 
+
 // WIDTH SCATTER PLOT
 // sets frame2 up
 const FRAME2 = d3.select("#scatterWidth") 
@@ -104,14 +105,6 @@ function build_width_scatter() {
                 .attr("cy", (d) => { return (Y_SCALE2(d.Petal_Width) + MARGINS.bottom); }) // scaled Y
                 .attr("r", 5)
                 .attr("class", (d) => { return d.Species; });
-                // .on("mouseover", function(d) {
-                //     d3.select(this).style("fill", "rosybrown"); }) // mouse over function       
-                // .on("mouseout", function(d) {
-                //     d3.select(this).style("fill", "pink"); }) // mouse out function
-                // .on("click", function(d) {
-                //     d3.select(this).classed("border", !d3.select(this).classed("border")); // toggles border class
-                //     click(d3.select(this).attr('cx'),  d3.select(this).attr("cy")); // displays last pt clicked
-            //})
 
         // Add an X axis to the vis  
         FRAME2.append("g") 
@@ -135,11 +128,32 @@ function build_width_scatter() {
                 .style("font-weight", "800")  
                 .text("Petal_Width vs. Sepal_Width");
 
+        FRAME2.call(d3.brush()
+                        .extent([MARGINS.left, MARGINS.top], [MARGINS.left + VIS_WIDTH, MARGINS.top + VIS_HEIGHT])
+                        .on("brush", updateChart));
+
+        
+
   
     });
 };
-build_width_scatter();
 
+
+// Function that is triggered when brushing is performed
+function updateChart() {
+    extent = d3.event.selection
+    FRAME2.selectAll('circle').classed("brushed", function(d){ return isBrushed(extent, (X_SCALE2(d.Sepal_Width) + MARGINS.left), (Y_SCALE2(d.Petal_Width) + MARGINS.bottom) ) } )
+}
+
+// A function that return TRUE or FALSE according if a dot is in the selection or not
+function isBrushed(brush_coords, cx, cy) {
+    var x0 = brush_coords[0][0],
+        x1 = brush_coords[1][0],
+        y0 = brush_coords[0][1],
+        y1 = brush_coords[1][1];
+    return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;    // This return TRUE or FALSE depending on if the points is in the selected area
+}
+build_width_scatter();
 // BAR GRAPH
 // sets frame3 up
 const FRAME3 = d3.select("#bar") 

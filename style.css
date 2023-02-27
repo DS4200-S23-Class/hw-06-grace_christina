@@ -34,3 +34,8 @@ body {
     fill: cornflowerblue;
     opacity: 50%;
 }
+
+.selecteds {
+    outline-color: orange;
+    opacity: 80%;
+}
