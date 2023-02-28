@@ -62,7 +62,7 @@ function build_plots() {
                 .attr("cx", (d) => { return (X_SCALE1(d.Sepal_Length) + MARGINS.left); }) // scaled X
                 .attr("cy", (d) => { return (Y_SCALE1(d.Petal_Length) + MARGINS.bottom); }) // scaled Y
                 .attr("r", 5)
-                .attr("class", (d) => { return d.Species + " point"  });
+                .attr("class", (d) => { return d.Species});
 
         // Add an X axis to the vis  
         FRAME1.append("g") 
@@ -89,7 +89,7 @@ function build_plots() {
                 .attr("cx", (d) => { return (X_SCALE2(d.Sepal_Width) + MARGINS.left); }) // scaled X
                 .attr("cy", (d) => { return (Y_SCALE2(d.Petal_Width) + MARGINS.bottom); }) // scaled Y
                 .attr("r", 5)
-                .attr("class", (d) => { return d.Species + " point" });
+                .attr("class", (d) => { return d.Species});
 
         // Add an X axis to the vis  
         FRAME2.append("g") 
@@ -121,23 +121,18 @@ function build_plots() {
                             .domain([0, 60])
                             .range([VIS_HEIGHT, 0]);
 
-        const data2 = [{Species: "setosa", Amount: 50},
-                {Species: "versicolor", Amount: 50},
-                {Species: "virginica", Amount: 50},
-            ]
-
 
         // add bars
         let myBars = FRAME3.append("g")
             .selectAll("bar") 
-            .data(data2)
+            .data(data)
             .enter()  
             .append("rect")
                 .attr("x", (d) => { return (X_SCALE3(d.Species) + MARGINS.left)})
-                .attr("y", (d) => { return (Y_SCALE3(d.Amount) + MARGINS.top)}) 
+                .attr("y", (d) => { return (Y_SCALE3(50) + MARGINS.top)}) 
                 .attr("width", X_SCALE3.bandwidth())
-                .attr("height", (d) => { return (VIS_HEIGHT - Y_SCALE3(d.Amount)); })
-                .attr("class", (d) => { return d.Species + " bar" });
+                .attr("height", (d) => { return (VIS_HEIGHT - Y_SCALE3(50)); })
+                .attr("class", (d) => { return d.Species});
 
 
         // Add an X axis to the vis  
@@ -162,6 +157,8 @@ function updateChart(event) {
     myPoint2.classed("brushed", function(d){ return isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)  } )
     myBars.classed("brushed", function(d){ return isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)  } )
 }
+
+
 
     });
 };
