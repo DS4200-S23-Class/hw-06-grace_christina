@@ -21,21 +21,22 @@ body {
 }
 
 .setosa {
-    fill: mediumaquamarine;
-    opacity: 50%;
+    fill: darkgreen;
+    opacity: 30%;
 }
 
 .versicolor {
-    fill: orange;
-    opacity: 50%;
+    fill: darkred;
+    opacity: 30%;
 }
 
 .virginica {
-    fill: cornflowerblue;
-    opacity: 50%;
+    fill: darkblue;
+    opacity: 30%;
 }
 
-.selecteds {
-    outline-color: orange;
-    opacity: 80%;
+.brushed {
+    stroke: orange;
+    stroke-width: 3px;
+    opacity: 100;
 }
