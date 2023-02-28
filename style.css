@@ -21,17 +21,17 @@ body {
 }
 
 .setosa {
-    fill: darkgreen;
+    fill: mediumaquamarine;
     opacity: 30%;
 }
 
 .versicolor {
-    fill: darkred;
+    fill: orange;
     opacity: 30%;
 }
 
 .virginica {
-    fill: darkblue;
+    fill: cornflowerblue;
     opacity: 30%;
 }
 
