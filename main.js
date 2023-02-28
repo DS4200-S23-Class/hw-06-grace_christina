@@ -1,4 +1,4 @@
-// LENGTH SCATTER PLOT
+// LENGTH SCATTER PLOT (vis1)
 // sets frame1 up
 const FRAME_HEIGHT = 450;
 const FRAME_WIDTH = 450; 
@@ -23,7 +23,7 @@ const Y_SCALE1 = d3.scaleLinear()
                     .domain([0, 7])
                     .range([VIS_HEIGHT, 0]); 
 
-// WIDTH SCATTER PLOT
+// WIDTH SCATTER PLOT (vis2)
 // sets frame2 up
 const FRAME2 = d3.select("#scatterWidth") 
                   .append("svg") 
@@ -39,7 +39,7 @@ const Y_SCALE2 = d3.scaleLinear()
                     .domain([0, 3])
                     .range([VIS_HEIGHT, 0]); 
 
-// BAR PLOT
+// BAR PLOT (vis3)
 const FRAME3 = d3.select("#bar") 
                   .append("svg") 
                     .attr("height", FRAME_HEIGHT)   
@@ -48,30 +48,30 @@ const FRAME3 = d3.select("#bar")
 
 
 
-// builds scatter plot for length
+// builds all plots
 function build_plots() {
     // reads in data from file
     d3.csv("data/iris.csv").then((data) => {
 
-        // add our circles with styling 
+        // adds points to vis1 
         let myPoint1 = FRAME1.append("g")
             .selectAll("point") 
             .data(data)
             .enter()  
             .append("circle")
-                .attr("cx", (d) => { return (X_SCALE1(d.Sepal_Length) + MARGINS.left); }) // scaled X
-                .attr("cy", (d) => { return (Y_SCALE1(d.Petal_Length) + MARGINS.bottom); }) // scaled Y
+                .attr("cx", (d) => { return (X_SCALE1(d.Sepal_Length) + MARGINS.left); })
+                .attr("cy", (d) => { return (Y_SCALE1(d.Petal_Length) + MARGINS.bottom); })
                 .attr("r", 5)
                 .attr("class", (d) => { return d.Species});
 
-        // Add an X axis to the vis  
+        // adds X axis to vis1
         FRAME1.append("g") 
             .attr("transform", "translate(" + MARGINS.left + 
                 "," + (VIS_HEIGHT + MARGINS.top) + ")") 
             .call(d3.axisBottom(X_SCALE1).ticks(10)) 
                 .attr("font-size", '10px'); 
 
-        // Add a Y axis to the vis  
+        // adds Y axis to vis1 
         FRAME1.append("g") 
                 .attr("transform", "translate(" + MARGINS.left + 
                     "," + (MARGINS.top) + ")") 
@@ -80,49 +80,49 @@ function build_plots() {
 
 
 
-        // add our circles with styling 
+        // adds points to vis2 
         let myPoint2 = FRAME2.append("g")
             .selectAll("point") 
             .data(data)
             .enter()  
             .append("circle")
-                .attr("cx", (d) => { return (X_SCALE2(d.Sepal_Width) + MARGINS.left); }) // scaled X
-                .attr("cy", (d) => { return (Y_SCALE2(d.Petal_Width) + MARGINS.bottom); }) // scaled Y
+                .attr("cx", (d) => { return (X_SCALE2(d.Sepal_Width) + MARGINS.left); })
+                .attr("cy", (d) => { return (Y_SCALE2(d.Petal_Width) + MARGINS.bottom); })
                 .attr("r", 5)
                 .attr("class", (d) => { return d.Species});
 
-        // Add an X axis to the vis  
+        // adds X axis to vis2 
         FRAME2.append("g") 
             .attr("transform", "translate(" + MARGINS.left + 
                 "," + (VIS_HEIGHT + MARGINS.top) + ")") 
             .call(d3.axisBottom(X_SCALE2).ticks(10)) 
                 .attr("font-size", '10px'); 
 
-        // Add a Y axis to the vis  
+        // adds Y axis to vis2  
         FRAME2.append("g") 
                 .attr("transform", "translate(" + MARGINS.left + 
                     "," + (MARGINS.top) + ")") 
                 .call(d3.axisLeft(Y_SCALE2).ticks(10)) 
                     .attr("font-size", '10px');
 
-
+        // creates brush for vis2
         FRAME2.call(d3.brush()
                         .extent([[0,0], [FRAME_WIDTH, FRAME_HEIGHT]])
                         .on("start brush", updateChart));
 
         
-        // scaling x function for bar graph
+        // scaling X function for bar graph
         const X_SCALE3 = d3.scaleBand()
                             .domain(data.map(function (d) { return d.Species; }))
                             .range([0, VIS_WIDTH]).padding(0.2);
 
-        // scaling y function for bar graph
+        // scaling Y function for bar graph
         const Y_SCALE3 = d3.scaleLinear()
                             .domain([0, 60])
                             .range([VIS_HEIGHT, 0]);
 
 
-        // add bars
+        // add bars to vis3
         let myBars = FRAME3.append("g")
             .selectAll("bar") 
             .data(data)
@@ -135,14 +135,14 @@ function build_plots() {
                 .attr("class", (d) => { return d.Species});
 
 
-        // Add an X axis to the vis  
+        // adds X axis to vis3
         FRAME3.append("g") 
             .attr("transform", "translate(" + MARGINS.left + 
                 "," + (VIS_HEIGHT + MARGINS.top) + ")") 
             .call(d3.axisBottom(X_SCALE3).ticks(10)) 
                 .attr("font-size", '10px'); 
 
-        // Add a Y axis to the vis  
+        // adds Y axis to vis3  
         FRAME3.append("g") 
                 .attr("transform", "translate(" + MARGINS.left + 
                     "," + (MARGINS.top) + ")") 
@@ -150,9 +150,10 @@ function build_plots() {
                     .attr("font-size", '10px');
 
 
-// Function that is triggered when brushing is performed
+// function that is triggered when brushing is performed
 function updateChart(event) {
     extent = event.selection;
+    // adds brushed class to points in vis1 and vis2 and bars in vis3 whose data points were brushed
     myPoint1.classed("brushed", function(d){ return isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)  } )
     myPoint2.classed("brushed", function(d){ return isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)  } )
     myBars.classed("brushed", function(d){ return isBrushed(extent, X_SCALE2(d.Sepal_Width) + MARGINS.left, Y_SCALE2(d.Petal_Width) + MARGINS.top)  } )
@@ -164,13 +165,14 @@ function updateChart(event) {
 };
 
 
-// A function that return TRUE or FALSE according if a dot is in the selection or not
+// function that determines whether or not a point was brushed
 function isBrushed(brush_coords, cx, cy) {
     var x0 = brush_coords[0][0],
         x1 = brush_coords[1][0],
         y0 = brush_coords[0][1],
         y1 = brush_coords[1][1];
-    return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;    // This return TRUE or FALSE depending on if the points is in the selected area
+    // returns TRUE if point is in selected/brushed area
+    return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;
 }
 
 build_plots();
