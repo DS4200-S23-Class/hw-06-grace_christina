@@ -22,17 +22,17 @@ body {
 
 .setosa {
     fill: mediumaquamarine;
-    opacity: 30%;
+    opacity: 50%;
 }
 
 .versicolor {
     fill: pink;
-    opacity: 30%;
+    opacity: 50%;
 }
 
 .virginica {
     fill: cornflowerblue;
-    opacity: 30%;
+    opacity: 50%;
 }
 
 .brushed {
